@@ -1,26 +1,33 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import httpStatus from 'http-status';
+import ticketsService from '@/services/tickets-service';
 
-export async function getTicketTypes(req: Request, res: Response) {
+export async function getTicketTypes(req: Request, res: Response, next: NextFunction) {
     try {
-      return res.status(httpStatus.OK).send();
+      const ticketTypes = ticketsService.getTicketTypes();
+      return res.status(httpStatus.OK).send(ticketTypes);
     } catch (error) {
-      return res.status(httpStatus.UNAUTHORIZED).send({});
+      next(error);
     }
   }
 
-export async function getUserTickets(req: Request, res: Response) {
+export async function getUserTickets(req: Request, res: Response, next: NextFunction) {
+    const userId = res.locals.userId as number;
     try {
-      return res.status(httpStatus.OK).send();
+      const ticket = ticketsService.getUserTicket(userId);
+      return res.status(httpStatus.OK).send(ticket);
     } catch (error) {
-      return res.status(httpStatus.UNAUTHORIZED).send({});
+      next(error);
     }
   }
 
-export async function createUserTicket(req: Request, res: Response) {
+export async function createUserTicket(req: Request, res: Response, next: NextFunction) {
+    const userId = res.locals.userId as number;
+    const ticketTypeId = req.body as number;
     try {
-      return res.status(httpStatus.OK).send();
+      const newTicket = ticketsService.createUserTicket(userId, ticketTypeId);
+      return res.status(httpStatus.CREATED).send(newTicket);
     } catch (error) {
-      return res.status(httpStatus.UNAUTHORIZED).send({});
+      next(error);
     }
   }
