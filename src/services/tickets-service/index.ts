@@ -5,30 +5,24 @@ import ticketRepository from '@/repositories/ticket-repository';
 
 async function getTicketTypes(): Promise<TicketType[]> {
   const ticketTypes: TicketType[] = await ticketRepository.getAllTicketTypes();
-
   return ticketTypes;
 }
 
 async function getUserTicket(userId: number): Promise<TicketOutput> {
   const enrollmentId: number = await ticketRepository.getEnrollment(userId);
-  if (!enrollmentId) {
-    throw notFoundError();
-  }
+    if (enrollmentId === null) throw notFoundError();
   const ticket: TicketOutput = await ticketRepository.getUserTicket(enrollmentId);
-  if (!ticket) {
-    throw notFoundError();
-  }
+  console.log(ticket);
+   if (ticket === null) throw notFoundError();
 
   return ticket;
 }
 
 async function createUserTicket(userId: number, ticketTypeId: number): Promise<TicketOutput> {
   const enrollmentId: number = await ticketRepository.getEnrollment(userId);
-  if (!enrollmentId) {
-    throw notFoundError();
-  }
+   if (enrollmentId === null) throw notFoundError();
   const newTicket: TicketOutput = await ticketRepository.postUserTicket(enrollmentId, ticketTypeId);
-
+  
   return newTicket;
 }
 

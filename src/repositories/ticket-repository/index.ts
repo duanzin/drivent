@@ -3,7 +3,8 @@ import { prisma } from '@/config';
 import { TicketOutput } from '@/protocols';
 
 async function getAllTicketTypes(): Promise<TicketType[]> {
-  return await prisma.ticketType.findMany();
+  const types: TicketType[] = await prisma.ticketType.findMany();
+  return types;
 }
 
 async function getEnrollment(userId: number) {
@@ -13,11 +14,12 @@ async function getEnrollment(userId: number) {
     },
   });
 
+  if (enrollment === null) return null; 
   return enrollment.id;
 }
 
 async function getUserTicket(enrollmentId: number): Promise<TicketOutput> {
-  return await prisma.ticket.findUnique({
+  const ticket = await prisma.ticket.findUnique({
     where: {
       enrollmentId: enrollmentId,
     },
@@ -26,21 +28,14 @@ async function getUserTicket(enrollmentId: number): Promise<TicketOutput> {
       status: true,
       ticketTypeId: true,
       enrollmentId: true,
-      TicketType: {
-        select: {
-          id: true,
-          name: true,
-          price: true,
-          isRemote: true,
-          includesHotel: true,
-          createdAt: true,
-          updatedAt: true,
-        },
-      },
+      TicketType: true,
       createdAt: true,
       updatedAt: true,
     },
   });
+
+  if(ticket === null) return null;
+  return ticket;
 }
 
 async function postUserTicket(enrollmentId: number, ticketTypeId: number): Promise<TicketOutput> {
@@ -60,30 +55,7 @@ async function postUserTicket(enrollmentId: number, ticketTypeId: number): Promi
     },
   });
 
-  return await prisma.ticket.findUnique({
-    where: {
-      enrollmentId: enrollmentId,
-    },
-    select: {
-      id: true,
-      status: true,
-      ticketTypeId: true,
-      enrollmentId: true,
-      TicketType: {
-        select: {
-          id: true,
-          name: true,
-          price: true,
-          isRemote: true,
-          includesHotel: true,
-          createdAt: true,
-          updatedAt: true,
-        },
-      },
-      createdAt: true,
-      updatedAt: true,
-    },
-  });
+  return await getUserTicket(enrollmentId);
 }
 
 const ticketRepository = {

@@ -1,21 +1,26 @@
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction, Response } from 'express';
 import httpStatus from 'http-status';
 import ticketsService from '@/services/tickets-service';
+import { badRequestError } from '@/errors/bad-request-error';
+import { AuthenticatedRequest } from '@/middlewares';
+import { TicketType } from '@prisma/client';
+import { TicketOutput } from '@/protocols';
 
-export async function getTicketTypes(req: Request, res: Response, next: NextFunction) {
+export async function getTicketTypes(req: AuthenticatedRequest, res: Response) {
   try {
-    const ticketTypes = ticketsService.getTicketTypes();
+    const ticketTypes: TicketType[]= await ticketsService.getTicketTypes();
     return res.status(httpStatus.OK).send(ticketTypes);
   } catch (error) {
-    console.log(error);
-    next(error);
+    res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
   }
 }
 
-export async function getUserTickets(req: Request, res: Response, next: NextFunction) {
-  const userId = res.locals.userId as number;
+export async function getUserTickets(req: AuthenticatedRequest, res: Response, next: NextFunction) {
   try {
-    const ticket = ticketsService.getUserTicket(userId);
+    const userId = req.userId as number;
+    console.log(userId);
+    const ticket: TicketOutput = await ticketsService.getUserTicket(userId);
+    console.log(ticket);
     return res.status(httpStatus.OK).send(ticket);
   } catch (error) {
     console.log(error);
@@ -23,14 +28,14 @@ export async function getUserTickets(req: Request, res: Response, next: NextFunc
   }
 }
 
-export async function createUserTicket(req: Request, res: Response, next: NextFunction) {
-  const userId = res.locals.userId as number;
-  const ticketTypeId = req.body as number;
+export async function createUserTicket(req: AuthenticatedRequest, res: Response, next: NextFunction) {
   try {
-    const newTicket = ticketsService.createUserTicket(userId, ticketTypeId);
+    if(!req.body.ticketTypeId) throw badRequestError();
+    const userId = req.userId as number;
+    const ticketTypeId = req.body.ticketTypeId as number;
+    const newTicket: TicketOutput = await ticketsService.createUserTicket(userId, ticketTypeId);
     return res.status(httpStatus.CREATED).send(newTicket);
   } catch (error) {
-    console.log(error);
     next(error);
   }
 }
