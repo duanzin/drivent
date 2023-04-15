@@ -29,27 +29,27 @@ export type RequestError = {
 };
 
 export type TicketOutput = {
-  id: number,
-  status: string,
-  ticketTypeId: number,
-  enrollmentId: number,
+  id: number;
+  status: string;
+  ticketTypeId: number;
+  enrollmentId: number;
   TicketType: {
-    id: number,
-    name: string,
-    price: number,
-    isRemote: boolean,
-    includesHotel: boolean,
-    createdAt: Date,
-    updatedAt: Date,
-  },
-  createdAt: Date,
-  updatedAt: Date,
+    id: number;
+    name: string;
+    price: number;
+    isRemote: boolean;
+    includesHotel: boolean;
+    createdAt: Date;
+    updatedAt: Date;
+  };
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export type CardData = {
-  issuer: string,
-    number: number,
-    name: string,
-    expirationDate: Date,
-    cvv: number,
-}
+  issuer: string;
+  number: number;
+  name: string;
+  expirationDate: Date;
+  cvv: number;
+};

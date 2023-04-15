@@ -7,18 +7,18 @@ async function getAllTicketTypes(): Promise<TicketType[]> {
 }
 
 async function getEnrollment(userId: number) {
-  const { id } = await prisma.enrollment.findUnique({
-    where:{
+  const enrollment = await prisma.enrollment.findUnique({
+    where: {
       userId: userId,
-    }
+    },
   });
 
-  return id;
+  return enrollment.id;
 }
 
-async function getUserTicket(enrollmentId: number): Promise<TicketOutput>{
+async function getUserTicket(enrollmentId: number): Promise<TicketOutput> {
   return await prisma.ticket.findUnique({
-    where:{
+    where: {
       enrollmentId: enrollmentId,
     },
     select: {
@@ -27,7 +27,7 @@ async function getUserTicket(enrollmentId: number): Promise<TicketOutput>{
       ticketTypeId: true,
       enrollmentId: true,
       TicketType: {
-        select:{
+        select: {
           id: true,
           name: true,
           price: true,
@@ -38,30 +38,30 @@ async function getUserTicket(enrollmentId: number): Promise<TicketOutput>{
         },
       },
       createdAt: true,
-      updatedAt: true
-      },
-    });
-  }
+      updatedAt: true,
+    },
+  });
+}
 
-async function postUserTicket(enrollmentId: number, ticketTypeId: number): Promise<TicketOutput>{
+async function postUserTicket(enrollmentId: number, ticketTypeId: number): Promise<TicketOutput> {
   await prisma.ticket.upsert({
-    where:{
-      enrollmentId: enrollmentId || 0,
+    where: {
+      enrollmentId: enrollmentId,
     },
-    create:{
+    create: {
       ticketTypeId: ticketTypeId,
       enrollmentId: enrollmentId,
-      status: "RESERVED",
+      status: 'RESERVED',
     },
-    update:{
+    update: {
       ticketTypeId: ticketTypeId,
       enrollmentId: enrollmentId,
-      status: "RESERVED",
-    }
+      status: 'RESERVED',
+    },
   });
 
   return await prisma.ticket.findUnique({
-    where:{
+    where: {
       enrollmentId: enrollmentId,
     },
     select: {
@@ -70,7 +70,7 @@ async function postUserTicket(enrollmentId: number, ticketTypeId: number): Promi
       ticketTypeId: true,
       enrollmentId: true,
       TicketType: {
-        select:{
+        select: {
           id: true,
           name: true,
           price: true,
@@ -81,18 +81,16 @@ async function postUserTicket(enrollmentId: number, ticketTypeId: number): Promi
         },
       },
       createdAt: true,
-      updatedAt: true
-      },
-    });
+      updatedAt: true,
+    },
+  });
 }
-
-
 
 const ticketRepository = {
   getAllTicketTypes,
   getEnrollment,
   getUserTicket,
-  postUserTicket
+  postUserTicket,
 };
-  
+
 export default ticketRepository;
