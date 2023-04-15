@@ -14,12 +14,12 @@ async function getEnrollment(userId: number) {
     },
   });
 
-  if (enrollment === null) return null; 
+  if (enrollment === null) return null;
   return enrollment.id;
 }
 
 async function getUserTicket(enrollmentId: number): Promise<TicketOutput> {
-  const ticket = await prisma.ticket.findUnique({
+  const ticket: TicketOutput = await prisma.ticket.findUnique({
     where: {
       enrollmentId: enrollmentId,
     },
@@ -34,7 +34,7 @@ async function getUserTicket(enrollmentId: number): Promise<TicketOutput> {
     },
   });
 
-  if(ticket === null) return null;
+  if (ticket === null) return null;
   return ticket;
 }
 
