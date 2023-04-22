@@ -1,8 +1,8 @@
 import { NextFunction, Response } from 'express';
 import httpStatus from 'http-status';
+import { Hotel } from '@prisma/client';
 import { AuthenticatedRequest } from '@/middlewares';
 import hotelsService from '@/services/hotels-service';
-import { Hotel } from '@prisma/client';
 import { HotelRooms } from '@/protocols';
 import { badRequestError } from '@/errors/bad-request-error';
 

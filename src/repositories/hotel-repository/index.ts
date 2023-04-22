@@ -7,18 +7,18 @@ async function getHotels(): Promise<Hotel[]> {
   return hotels;
 }
 
-async function getHotelRooms(hotelId: number): Promise<HotelRooms>{
+async function getHotelRooms(hotelId: number): Promise<HotelRooms> {
   const hotelRooms: HotelRooms = await prisma.hotel.findUnique({
     where: {
       id: hotelId,
     },
-    select:{
-        id: true,
-        name: true,
-        image: true,
-        createdAt: true,
-        updatedAt: true,
-        Rooms: true,
+    select: {
+      id: true,
+      name: true,
+      image: true,
+      createdAt: true,
+      updatedAt: true,
+      Rooms: true,
     },
   });
 
@@ -26,8 +26,8 @@ async function getHotelRooms(hotelId: number): Promise<HotelRooms>{
 }
 
 const hotelRepository = {
-    getHotels,
-    getHotelRooms
-  };
-  
-  export default hotelRepository;
+  getHotels,
+  getHotelRooms,
+};
+
+export default hotelRepository;

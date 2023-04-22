@@ -1,4 +1,4 @@
-import { Room } from "@prisma/client";
+import { Room } from '@prisma/client';
 
 export type ApplicationError = {
   name: string;
