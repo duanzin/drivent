@@ -7,24 +7,18 @@ async function getHotels(): Promise<Hotel[]> {
   return hotels;
 }
 
-async function getEnrollment(userId: number) {
-  const enrollment = await prisma.enrollment.findUnique({
-    where: {
-      userId: userId,
-    },
-  });
-
-  if (enrollment === null) return null;
-  return enrollment.id;
-}
-
 async function getHotelRooms(hotelId: number): Promise<HotelRooms>{
   const hotelRooms: HotelRooms = await prisma.hotel.findUnique({
     where: {
       id: hotelId,
     },
-    include: {
-      Rooms: true
+    select:{
+        id: true,
+        name: true,
+        image: true,
+        createdAt: true,
+        updatedAt: true,
+        Rooms: true,
     },
   });
 
