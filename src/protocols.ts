@@ -1,3 +1,5 @@
+import { Room } from "@prisma/client";
+
 export type ApplicationError = {
   name: string;
   message: string;
@@ -52,4 +54,13 @@ export type CardData = {
   name: string;
   expirationDate: Date;
   cvv: number;
+};
+
+export type HotelRooms = {
+  id: number;
+  name: string;
+  image: string;
+  createdAt: Date;
+  updatedAt: Date;
+  Rooms: Room[];
 };
