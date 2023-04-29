@@ -1,4 +1,4 @@
-import { Room } from '@prisma/client';
+import { Booking, Room } from '@prisma/client';
 
 export type ApplicationError = {
   name: string;
@@ -64,3 +64,13 @@ export type HotelRooms = {
   updatedAt: Date;
   Rooms: Room[];
 };
+
+export type userBooking = {
+  id: number;
+  Room: Room;
+}
+
+export type roomBooking = {
+  capacity: number;
+  Booking: Booking[];
+}
