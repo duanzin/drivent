@@ -4,7 +4,6 @@ import { Hotel } from '@prisma/client';
 import { AuthenticatedRequest } from '@/middlewares';
 import hotelsService from '@/services/hotels-service';
 import { HotelRooms } from '@/protocols';
-import { badRequestError } from '@/errors/bad-request-error';
 
 export async function getAllHotels(req: AuthenticatedRequest, res: Response, next: NextFunction) {
   try {

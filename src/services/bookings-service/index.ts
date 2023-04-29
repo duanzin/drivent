@@ -14,12 +14,13 @@ async function bookRoom(userId: number, roomId: number): Promise<number> {
     if (!room) throw notFoundError();
     if(room.capacity <= room.Booking.length) throw forbiddenError();
     const bookingId: number = await bookingRepository.bookRoom(userId, roomId);
-    if(!bookingId) throw forbiddenError();
     return bookingId;
   }
 
 async function alterBooking(userId: number,bookingId: number, roomId: number) {
+  console.log(bookingId);
   const bookingUserId = await bookingRepository.verifyBooking(bookingId);
+  console.log(bookingUserId);
   if(!bookingUserId || bookingUserId !== userId) throw forbiddenError();
   const room = await bookingRepository.verifyRoom(roomId);
   if(!room) throw notFoundError();
