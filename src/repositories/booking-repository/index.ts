@@ -51,6 +51,7 @@ async function verifyBooking(bookingId: number): Promise<number>{
             id: bookingId,
         }
     });
+    if(booking == null) return undefined;
     return booking.userId;
   }
 
